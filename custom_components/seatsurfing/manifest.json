@@ -6,12 +6,12 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/seatsurfing",
+  "documentation": "https://github.com/giz-berlin/homeassistant-seatsurfing",
   "homekit": {},
   "integration_type": "service",
   "iot_class": "local_polling",
-  "quality_scale": "bronze",
   "requirements": [],
   "ssdp": [],
-  "zeroconf": []
+  "zeroconf": [],
+  "version": "0.1.0"
 }
