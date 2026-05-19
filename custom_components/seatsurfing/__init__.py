@@ -17,9 +17,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: SeatsurfingConfigEntry) 
         entry.data[CONF_HOST], entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD]
     )
 
-    # component = ExampleSensor()
-    # await component.async_add_entities()
-
     await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
 
     return True
