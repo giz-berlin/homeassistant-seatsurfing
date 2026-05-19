@@ -1,6 +1,7 @@
 """Platform for sensor integration."""
 
 import datetime
+import urllib
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
