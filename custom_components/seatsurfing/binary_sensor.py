@@ -59,10 +59,12 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
         )
         self._api = api
 
-        self._next_booking_start_date = None
-        self._next_user = None
         self._current_user = None
         self._current_booking_end = None
+        self._current_subject = None
+        self._next_booking_start_date = None
+        self._next_user = None
+        self._next_subject = None
 
     @property
     def should_poll(self) -> bool:
@@ -79,8 +81,10 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
         currently_booked = False
         current_user = None
         current_booking_end = None
+        current_subject = None
         next_booking_start_date = None
         next_user = None
+        next_subject = None
         now = datetime.datetime.now(datetime.UTC)
         for booking in availability["bookings"]:
             start_date = datetime.datetime.fromisoformat(booking["enter"])
@@ -88,17 +92,21 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
             if start_date <= now <= end_date:
                 currently_booked = True
                 current_user = booking["userEmail"]
+                current_subject = booking["subject"]
                 current_booking_end = end_date
             if start_date > now and (
                 not next_booking_start_date or start_date < next_booking_start_date
             ):
                 next_booking_start_date = start_date
                 next_user = booking["userEmail"]
+                next_subject = booking["subject"]
 
-        self._next_booking_start_date = next_booking_start_date
-        self._next_user = next_user
         self._current_user = current_user
         self._current_booking_end = current_booking_end
+        self._current_subject = current_subject
+        self._next_booking_start_date = next_booking_start_date
+        self._next_user = next_user
+        self._next_subject = next_subject
 
         self._attr_is_on = currently_booked
 
@@ -110,16 +118,20 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
         Convention for attribute names is lowercase snake_case.
         """
         attributes = {}
+        if self._current_user:
+            attributes["current_user"] = self._current_user
+        if self._current_subject:
+            attributes["current_subject"] = self._current_subject
+        if self._current_booking_end:
+            attributes["current_booking_end"] = self._current_booking_end.isoformat()
         if self._next_booking_start_date:
             attributes["next_booking_start_date"] = (
                 self._next_booking_start_date.isoformat()
             )
         if self._next_user:
             attributes["next_user"] = self._next_user
-        if self._current_user:
-            attributes["current_user"] = self._current_user
-        if self._current_booking_end:
-            attributes["current_booking_end"] = self._current_booking_end.isoformat()
+        if self._next_subject:
+            attributes["next_subject"] = self._next_subject
         return attributes
 
     @property
