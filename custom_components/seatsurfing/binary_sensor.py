@@ -53,7 +53,9 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
         self._attr_name = f"{location['name']}: {space['name']}"
         self._const_value = False
         self._location_id = location["id"]
+        self._location_name = location["name"]
         self._space_id = space["id"]
+        self._space_name = space["name"]
         self._attr_unique_id = (
             f"{DOMAIN}_{api.host}_{self._location_id}_{self._space_id}"
         )
@@ -117,7 +119,10 @@ class SeatsurfingOccupancySensor(BinarySensorEntity):
         Implemented by component base class, should not be extended by integrations.
         Convention for attribute names is lowercase snake_case.
         """
-        attributes = {}
+        attributes = {
+            'location_name': self._location_name,
+            'space_name': self._space_name,
+        }
         if self._current_user:
             attributes["current_user"] = self._current_user
         if self._current_subject:
